@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Team Collaboration Playbook — Association Dues Monitoring System</title>
+<style>
+:root {
+  --navy: #0d3b66;
+  --navy-dark: #082947;
+  --blue: #1e6fd9;
+  --blue-light: #e8f0fc;
+  --amber: #f4a62a;
+  --amber-light: #fef5e7;
+  --green: #1f9d55;
+  --green-light: #e8f5ee;
+  --red: #c0392b;
+  --red-light: #fdeaea;
+  --grey-50: #f8fafc;
+  --grey-100: #f1f5f9;
+  --grey-200: #e2e8f0;
+  --grey-400: #94a3b8;
+  --grey-600: #475569;
+  --grey-800: #1e293b;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--grey-800);
+  background: var(--grey-50);
+  line-height: 1.6;
+  font-size: 16px;
+}
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, pre { font-family: var(--mono); }
+code {
+  background: var(--grey-100);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--navy);
+}
+pre {
+  background: var(--grey-800);
+  color: #e2e8f0;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.55;
+  margin: 16px 0;
+  position: relative;
+}
+pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+pre .comment { color: #64748b; }
+pre .kw { color: #c792ea; }
+pre .str { color: #c3e88d; }
+pre .fn { color: #82aaff; }
+pre .num { color: #f78c6c; }
+pre .prompt { color: #64748b; user-select: none; }
+
+/* ---------- layout ---------- */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- hero ---------- */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: #fff;
+  padding: 80px 24px 100px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 0; right: 0;
+  height: 80px;
+  background: var(--grey-50);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  transform: scaleX(1.2);
+}
+.hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-size: 42px;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.hero p {
+  font-size: 18px;
+  opacity: 0.85;
+  max-width: 720px;
+  margin: 0;
+}
+.hero .stack {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+.hero .stack span {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-family: var(--mono);
+}
+
+/* ---------- nav ---------- */
+.toc {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: -50px auto 60px;
+  max-width: 1032px;
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 2;
+}
+.toc-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--grey-400);
+  margin-bottom: 14px;
+}
+.toc ol {
+  margin: 0; padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px 24px;
+  counter-reset: toc;
+}
+.toc li {
+  counter-increment: toc;
+  font-size: 14.5px;
+}
+.toc li a {
+  color: var(--grey-800);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--grey-200);
+}
+.toc li a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--grey-400);
+  flex-shrink: 0;
+}
+.toc li a:hover { color: var(--blue); text-decoration: none; }
+.toc li a:hover::before { color: var(--blue); }
+
+/* ---------- sections ---------- */
+section {
+  max-width: 1080px;
+  margin: 0 auto 72px;
+  padding: 0 24px;
+}
+section h2 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  color: var(--navy);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+section h2 .num {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--grey-400);
+  letter-spacing: 0;
+}
+section .lede {
+  font-size: 17px;
+  color: var(--grey-600);
+  max-width: 720px;
+  margin: 0 0 32px;
+}
+section h3 {
+  font-size: 20px;
+  margin: 40px 0 12px;
+  color: var(--grey-800);
+  font-weight: 600;
+}
+section h4 {
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--grey-400);
+  margin: 28px 0 12px;
+}
+p { margin: 0 0 16px; }
+
+/* ---------- cards ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 24px 0;
+}
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--grey-200);
+}
+.card h4 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+/* ---------- callouts ---------- */
+.callout {
+  border-left: 4px solid var(--blue);
+  background: var(--blue-light);
+  padding: 16px 20px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 20px 0;
+  font-size: 15px;
+}
+.callout.warn { border-color: var(--amber); background: var(--amber-light); }
+.callout.danger { border-color: var(--red); background: var(--red-light); }
+.callout.success { border-color: var(--green); background: var(--green-light); }
+.callout strong { color: var(--navy); }
+.callout.warn strong { color: #b87600; }
+.callout.danger strong { color: var(--red); }
+.callout.success strong { color: var(--green); }
+
+/* ---------- team ---------- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.member {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--grey-200);
+  box-shadow: var(--shadow);
+}
+.member .initials {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.member .name { font-weight: 600; color: var(--grey-800); margin-bottom: 2px; }
+.member .role { font-size: 13px; color: var(--grey-600); }
+.member .handle {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--grey-400);
+  margin-top: 8px;
+}
+
+/* ---------- branch diagram ---------- */
+.git-flow {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--grey-200);
+  margin: 24px 0;
+  overflow-x: auto;
+}
+.git-flow svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+/* ---------- loop ---------- */
+.loop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+}
+.loop-step {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--blue);
+  position: relative;
+}
+.loop-step .step-num {
+  font-family: var(--mono);
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--blue-light);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.loop-step h5 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: var(--navy);
+}
+.loop-step p { margin: 0; font-size: 13.5px; color: var(--grey-600); }
+
+/* ---------- tables ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-size: 14.5px;
+  margin: 20px 0;
+}
+th {
+  background: var(--grey-100);
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--grey-600);
+  font-weight: 600;
+  border-bottom: 1px solid var(--grey-200);
+}
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--grey-100);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+td code { font-size: 13px; }
+
+/* ---------- checklist ---------- */
+.checklist {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 8px 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--grey-200);
+}
+.checklist ul { list-style: none; padding: 0; margin: 0; }
+.checklist li {
+  padding: 12px 0 12px 32px;
+  border-bottom: 1px solid var(--grey-100);
+  position: relative;
+  font-size: 14.5px;
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 14px;
+  width: 18px; height: 18px;
+  border: 2px solid var(--grey-400);
+  border-radius: 4px;
+}
+
+/* ---------- footer ---------- */
+footer {
+  background: var(--grey-800);
+  color: #cbd5e1;
+  padding: 40px 24px;
+  text-align: center;
+  font-size: 13.5px;
+  margin-top: 80px;
+}
+footer a { color: #93c5fd; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 640px) {
+  .hero h1 { font-size: 30px; }
+  .hero { padding: 60px 20px 80px; }
+  section h2 { font-size: 24px; }
+  .toc { padding: 20px; margin-top: -40px; }
+  pre { font-size: 12.5px; padding: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">CvSU Carmona · BS Computer Science · Capstone</div>
+    <h1>Team Collaboration Playbook</h1>
+    <p>
+      How we build the Association Dues Monitoring System together —
+      without stepping on each other's code, without losing work, and
+      without the "it works on my machine" excuse.
+    </p>
+    <div class="stack">
+      <span>Laravel 13</span>
+      <span>PHP 8.5</span>
+      <span>PostgreSQL</span>
+      <span>Git + GitHub</span>
+      <span>Branch → PR → Review → Merge</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <ol>
+    <li><a href="#team">Meet the team</a></li>
+    <li><a href="#mental-model">Git in one picture</a></li>
+    <li><a href="#branching">Branching strategy</a></li>
+    <li><a href="#commits">Commit messages that help</a></li>
+    <li><a href="#daily-loop">The daily development loop</a></li>
+    <li><a href="#pr">Pull requests &amp; reviews</a></li>
+    <li><a href="#pitfalls">Pitfalls we've already hit</a></li>
+    <li><a href="#emergency">Emergency commands</a></li>
+    <li><a href="#project">Project structure cheatsheet</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════════════ 1. TEAM ═══════════════════ -->
+<section id="team">
+  <h2><span class="num">01</span> Meet the team</h2>
+  <p class="lede">
+    Four developers, one codebase, one shared PostgreSQL database. Every commit
+    is visible to everyone in this group. Act accordingly.
+  </p>
+
+  <div class="team-grid">
+    <div class="member">
+      <div class="initials">EC</div>
+      <div class="name">Earl Jared P. Carbonell</div>
+      <div class="role">Backend · rule-based algorithm</div>
+      <div class="handle">@earljaed</div>
+    </div>
+    <div class="member">
+      <div class="initials">DC</div>
+      <div class="name">Dindo M. Cedro</div>
+      <div class="role">Database · Eloquent models</div>
+      <div class="handle">@dindo</div>
+    </div>
+    <div class="member">
+      <div class="initials">PL</div>
+      <div class="name">Paul Evan A. Longakit</div>
+      <div class="role">Frontend · Blade / Livewire</div>
+      <div class="handle">@paul-longakit</div>
+    </div>
+    <div class="member">
+      <div class="initials">JP</div>
+      <div class="name">Joey Ann T. Perez</div>
+      <div class="role">Testing · QA · docs</div>
+      <div class="handle">@joeyann</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Supervisor:</strong> Mr. Humel C. Ignas &mdash; final reviewer for anything
+    that touches the association's business rules.
+  </div>
+</section>
+
+<!-- ═══════════════════ 2. MENTAL MODEL ═══════════════════ -->
+<section id="mental-model">
+  <h2><span class="num">02</span> Git in one picture</h2>
+  <p class="lede">
+    Three places a file can live. Ninety percent of Git pain comes from forgetting
+    which one you're in.
+  </p>
+
+  <div class="git-flow">
+    <svg viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1e6fd9"/>
+        </marker>
+      </defs>
+      <style>
+        .box { fill: #fff; stroke: #e2e8f0; stroke-width: 1.5; }
+        .box-label { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #1e293b; }
+        .box-sub { font-family: ui-monospace, monospace; font-size: 11px; fill: #64748b; }
+        .arrow { stroke: #1e6fd9; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+        .cmd { font-family: ui-monospace, monospace; font-size: 11px; fill: #0d3b66; font-weight: 600; }
+      </style>
+
+      <!-- working directory -->
+      <rect class="box" x="20" y="70" width="200" height="100" rx="8"/>
+      <text class="box-label" x="120" y="100" text-anchor="middle">Working Directory</text>
+      <text class="box-sub" x="120" y="120" text-anchor="middle">files you edit in VSCode</text>
+      <text class="box-sub" x="120" y="140" text-anchor="middle">not yet tracked</text>
+
+      <!-- staging -->
+      <rect class="box" x="350" y="70" width="200" height="100" rx="8"/>
+      <text class="box-label" x="450" y="100" text-anchor="middle">Staging Area</text>
+      <text class="box-sub" x="450" y="120" text-anchor="middle">files ready to commit</text>
+      <text class="box-sub" x="450" y="140" text-anchor="middle">git add</text>
+
+      <!-- repo -->
+      <rect class="box" x="680" y="70" width="200" height="100" rx="8"/>
+      <text class="box-label" x="780" y="100" text-anchor="middle">Repository</text>
+      <text class="box-sub" x="780" y="120" text-anchor="middle">committed history</text>
+      <text class="box-sub" x="780" y="140" text-anchor="middle">git commit</text>
+
+      <!-- arrows -->
+      <line class="arrow" x1="220" y1="120" x2="345" y2="120"/>
+      <text class="cmd" x="282" y="110" text-anchor="middle">git add</text>
+
+      <line class="arrow" x1="550" y1="120" x2="675" y2="120"/>
+      <text class="cmd" x="612" y="110" text-anchor="middle">git commit</text>
+
+      <!-- push -->
+      <line class="arrow" x1="780" y1="175" x2="780" y2="210"/>
+      <text class="cmd" x="810" y="200" text-anchor="middle">git push</text>
+
+      <text class="box-sub" x="780" y="230" text-anchor="middle" style="font-weight: 600; fill: #0d3b66;">GitHub (origin)</text>
+    </svg>
+  </div>
+
+  <div class="callout warn">
+    <strong>Never <code>git add -A</code> blindly.</strong>
+    Run <code>git status</code> first. Confirm no <code>.env</code>, <code>vendor/</code>,
+    <code>node_modules/</code>, or <code>database.sqlite</code> sneaks in — those must
+    never be committed. Our project's <code>.gitignore</code> handles them; your job is
+    to verify.
+  </div>
+</section>
+
+<!-- ═══════════════════ 3. BRANCHING ═══════════════════ -->
+<section id="branching">
+  <h2><span class="num">03</span> Branching strategy</h2>
+  <p class="lede">
+    One long-lived branch. Everything else is short-lived and deletes on merge.
+    No exceptions, no "I'll just commit to main real quick."
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>main</h4>
+      <p>The deployed truth. Always green. Only merges from reviewed pull requests. Never push directly to <code>main</code>.</p>
+    </div>
+    <div class="card">
+      <h4>feature/*</h4>
+      <p>New functionality. Branches off <code>main</code>, merged back via PR. Deleted after merge.</p>
+    </div>
+    <div class="card">
+      <h4>fix/*</h4>
+      <p>Bug fixes. Same lifecycle as <code>feature/*</code>, just a different prefix for at-a-glance signal in the PR list.</p>
+    </div>
+    <div class="card">
+      <h4>docs/*</h4>
+      <p>README, doc updates, comments. Rarely touches code. Safe to review fast.</p>
+    </div>
+  </div>
+
+  <h3>Branch naming — always include your name</h3>
+  <p>
+    Prefix the branch with your last name so it's obvious who owns it in a shared
+    repo with four contributors. When a branch sits for weeks, "feature/payments"
+    tells nobody anything.
+  </p>
+
+<pre><code><span class="comment"># Format: {type}/{yourname}-{what}</span>
+<span class="kw">feature</span>/carbonell-rule-engine
+<span class="kw">feature</span>/cedro-payment-models
+<span class="kw">fix</span>/longakit-login-redirect-loop
+<span class="kw">docs</span>/perez-testing-checklist</code></pre>
+
+  <h3>Starting a new feature</h3>
+<pre><code><span class="comment"># 1. Always start from an up-to-date main</span>
+git checkout main
+git pull origin main
+
+<span class="comment"># 2. Create your branch</span>
+git checkout -b feature/carbonell-rule-engine
+
+<span class="comment"># 3. Do the work, commit as you go, push when ready for review</span>
+git push -u origin feature/carbonell-rule-engine</code></pre>
+
+  <div class="callout success">
+    <strong>Good branch lifetime: 1–3 days.</strong> If yours is older than a week,
+    break it into smaller branches. The longer a branch lives, the more painful
+    the eventual merge.
+  </div>
+</section>
+
+<!-- ═══════════════════ 4. COMMITS ═══════════════════ -->
+<section id="commits">
+  <h2><span class="num">04</span> Commit messages that help</h2>
+  <p class="lede">
+    Commit history is a diary the whole team reads. Make it readable.
+    We use Conventional Commits.
+  </p>
+
+  <h3>Format</h3>
+<pre><code><span class="comment"># Subject line: {type}({scope}): {what changed}</span>
+<span class="comment"># Blank line</span>
+<span class="comment"># Body: WHY it changed, not WHAT (the diff shows what)</span>
+
+feat(auth): add RBAC middleware and forced password change
+
+- EnsureUserHasRole checks role + is_active
+- EnsurePasswordIsChanged redirects to /password/change on first login
+- Seeded 4 test users with must_change_password=true for staff roles</code></pre>
+
+  <h3>Allowed types</h3>
+  <table>
+    <thead>
+      <tr><th>Type</th><th>Use for</th><th>Example</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>feat</code></td><td>New user-visible functionality</td><td><code>feat(payments): record partial payments</code></td></tr>
+      <tr><td><code>fix</code></td><td>Bug fix</td><td><code>fix(auth): rate limiter not clearing on success</code></td></tr>
+      <tr><td><code>test</code></td><td>Adding or fixing tests</td><td><code>test(login): cover inactive user rejection</code></td></tr>
+      <tr><td><code>docs</code></td><td>Documentation only</td><td><code>docs(readme): setup instructions for postgres</code></td></tr>
+      <tr><td><code>refactor</code></td><td>Code restructure, no behavior change</td><td><code>refactor(user): extract dashboardRoute helper</code></td></tr>
+      <tr><td><code>chore</code></td><td>Deps, config, tooling</td><td><code>chore: upgrade to Laravel 13.36</code></td></tr>
+      <tr><td><code>style</code></td><td>Formatting only</td><td><code>style: apply pint to auth folder</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Anti-patterns to avoid</h3>
+  <div class="callout danger">
+    <strong>❌ "fix"</strong> — tells nothing.<br/>
+    <strong>❌ "final", "final v2", "really final"</strong> — the diff already shows history.<br/>
+    <strong>❌ "asdf", "wip"</strong> — squash before pushing, or write something real.<br/>
+    <strong>❌ "Change: Env Changed"</strong> — what env? why? which values?
+  </div>
+
+  <div class="callout">
+    <strong>Rule of thumb:</strong> if your commit message can't answer
+    "what changed and why", it's not ready. Six months from now,
+    <code>git log --oneline</code> should be readable as a project timeline.
+  </div>
+</section>
+
+<!-- ═══════════════════ 5. DAILY LOOP ═══════════════════ -->
+<section id="daily-loop">
+  <h2><span class="num">05</span> The daily development loop</h2>
+  <p class="lede">
+    Every work session follows the same five steps. Don't skip step one.
+  </p>
+
+  <div class="loop">
+    <div class="loop-step">
+      <div class="step-num">01</div>
+      <h5>Sync</h5>
+      <p>Pull <code>main</code> and rebase your branch onto it. This is the morning ritual.</p>
+    </div>
+    <div class="loop-step">
+      <div class="step-num">02</div>
+      <h5>Branch</h5>
+      <p>Create or check out <code>feature/yourname-what</code>. Never work directly on <code>main</code>.</p>
+    </div>
+    <div class="loop-step">
+      <div class="step-num">03</div>
+      <h5>Build</h5>
+      <p>Small commits as you go. Run <code>php artisan test</code> before every commit.</p>
+    </div>
+    <div class="loop-step">
+      <div class="step-num">04</div>
+      <h5>Review</h5>
+      <p>Push, open a PR, tag a teammate. Address feedback in new commits.</p>
+    </div>
+    <div class="loop-step">
+      <div class="step-num">05</div>
+      <h5>Merge</h5>
+      <p>Squash-merge into <code>main</code>. Delete your branch. Pull main on your local.</p>
+    </div>
+  </div>
+
+  <h3>Step-by-step commands</h3>
+<pre><code><span class="comment"># ─── Step 1: Sync ───</span>
+git checkout main
+git pull origin main
+
+<span class="comment"># ─── Step 2: Branch ───</span>
+git checkout -b feature/carbonell-rule-engine
+
+<span class="comment"># ─── Step 3: Build ───</span>
+<span class="comment"># ... edit files in VSCode ...</span>
+php artisan test                <span class="comment"># all green before committing</span>
+git add app/Models app/Services
+git status                      <span class="comment"># verify ONLY what you intended</span>
+git commit -m "feat(rule): implement 12-month standing computation"
+
+<span class="comment"># ... more edits, more commits ...</span>
+git push -u origin feature/carbonell-rule-engine
+
+<span class="comment"># ─── Step 4: Review ───</span>
+<span class="comment"># Open PR on GitHub → assign teammate → address comments → push fixes</span>
+
+<span class="comment"># ─── Step 5: Merge ───</span>
+<span class="comment"># Click "Squash and merge" on GitHub</span>
+git checkout main
+git pull origin main            <span class="comment"># your local main is now updated</span>
+git branch -d feature/carbonell-rule-engine</code></pre>
+
+  <div class="callout warn">
+    <strong>If <code>git pull origin main</code> conflicts</strong> on your feature branch:
+    <code>git rebase origin/main</code>. Fix conflicts in your editor, <code>git add</code> the
+    resolved files, <code>git rebase --continue</code>. <em>Never</em> <code>git merge main</code>
+    into your feature branch — it pollutes the diff with main's commits.
+  </div>
+</section>
+
+<!-- ═══════════════════ 6. PR ═══════════════════ -->
+<section id="pr">
+  <h2><span class="num">06</span> Pull requests &amp; reviews</h2>
+  <p class="lede">
+    A pull request is a conversation, not a formality. The reviewer's job is to
+    prevent broken main, not to approve fast.
+  </p>
+
+  <h3>Before you open a PR</h3>
+  <div class="checklist">
+    <ul>
+      <li>Branch is rebased on the latest <code>main</code> (no merge commits)</li>
+      <li><code>php artisan test</code> passes locally &mdash; all 35+ tests</li>
+      <li>New behavior has at least one new test</li>
+      <li>No <code>dd()</code>, <code>dump()</code>, <code>var_dump()</code>, or <code>console.log()</code> left in</li>
+      <li>No <code>.env</code>, <code>vendor/</code>, or DB files in the diff</li>
+      <li>Commit messages follow the format from section 04</li>
+    </ul>
+  </div>
+
+  <h3>PR template</h3>
+<pre><code><span class="comment">## What</span>
+Implements the rule-based account standing algorithm (FR-21 to FR-25).
+
+<span class="comment">## Why</span>
+Needed so payments module can check eligibility before recording transactions.
+
+<span class="comment">## How to test</span>
+1. php artisan migrate:fresh --seed
+2. Log in as admin@altatierra.test / Admin@12345
+3. Navigate to /staff/dues
+4. Verify homeowner with 12 unpaid months → "Good Standing"
+5. Verify homeowner with 13 unpaid months → "Not in Good Standing"
+
+<span class="comment">## Screenshots</span>
+[screenshot.png]
+
+<span class="comment">## Closes</span>
+Closes #14</code></pre>
+
+  <h3>Reviewer checklist</h3>
+  <div class="checklist">
+    <ul>
+      <li>Does this match the linked issue / requirement?</li>
+      <li>Does the test suite still pass? (GitHub Actions will show if wired up)</li>
+      <li>Are the tests real assertions or just <code>assertTrue(true)</code>?</li>
+      <li>Is any business rule hardcoded instead of read from settings?</li>
+      <li>Is any policy decision invented by the code, rather than sourced from the HOA?</li>
+      <li>Are there edge cases the author missed? (empty inputs, boundary conditions, inactive users)</li>
+      <li>Would I understand this code in 6 months with no context?</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <strong>Respond to reviews in 24 hours.</strong> If you can't review, say so on
+    the PR and reassign. Silent PRs are invisible PRs, and invisible PRs are dead.
+  </div>
+</section>
+
+<!-- ═══════════════════ 7. PITFALLS ═══════════════════ -->
+<section id="pitfalls">
+  <h2><span class="num">07</span> Pitfalls we've already hit</h2>
+  <p class="lede">
+    Every one of these cost us time. Learn from them once.
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>Heredoc leakage into .php files</h4>
+      <p>
+        Pasting a bash <code>cat &gt; file.php &lt;&lt;'PHP'</code> block into the
+        terminal sometimes leaves the closing <code>PHP</code> inside the file.
+        <br/><br/>
+        <strong>Fix:</strong> always paste PHP content into VSCode, not the shell.
+        Or run <code>php -l file.php</code> right after.
+      </p>
+    </div>
+    <div class="card">
+      <h4>Class name collisions</h4>
+      <p>
+        Two files declaring <code>class ExampleTest</code> in the same namespace
+        → fatal on load. Laravel's default Unit and Feature examples both use
+        that class name, but different namespaces.
+        <br/><br/>
+        <strong>Fix:</strong> check namespaces with <code>grep -rH '^namespace' tests/</code>
+        after pasting test files.
+      </p>
+    </div>
+    <div class="card">
+      <h4>Model attribute drift</h4>
+      <p>
+        DB column has <code>DEFAULT TRUE</code> but the factory doesn't set it →
+        in-memory model has <code>null</code> → middleware rejects. Login worked,
+        tests broke.
+        <br/><br/>
+        <strong>Fix:</strong> for any column with a DB default, mirror it in
+        the model's <code>$attributes</code> AND the factory.
+      </p>
+    </div>
+    <div class="card">
+      <h4>VSCode stale language server</h4>
+      <p>
+        Edited the file outside VSCode? The IDE still shows errors from the old
+        version. <code>modelVersionId</code> frozen at a stale number = cache.
+        <br/><br/>
+        <strong>Fix:</strong> <code>Ctrl+Shift+P</code> →
+        <code>PHP: Restart Language Server</code>.
+      </p>
+    </div>
+    <div class="card">
+      <h4>Wrong tab, wrong file</h4>
+      <p>
+        <code>Ctrl+A</code>+<code>Delete</code>+<code>Paste</code> applies to the
+        <em>active</em> tab, not the one you think. You can overwrite the wrong
+        file and not notice.
+        <br/><br/>
+        <strong>Fix:</strong> glance at the tab title before pasting. Ctrl+Z undoes
+        the paste in that tab only.
+      </p>
+    </div>
+    <div class="card">
+      <h4>Migrations on the wrong DB</h4>
+      <p>
+        <code>php artisan migrate:fresh</code> against <code>hoa_db</code> wipes
+        all seeded users. Only run against test DBs. Check
+        <code>phpunit.xml</code> uses <code>sqlite :memory:</code>.
+        <br/><br/>
+        <strong>Fix:</strong> before <code>php artisan test</code>, verify
+        <code>grep DB_ phpunit.xml</code>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 8. EMERGENCY ═══════════════════ -->
+<section id="emergency">
+  <h2><span class="num">08</span> Emergency commands</h2>
+  <p class="lede">
+    For the "oh no" moments. Memorize the top three.
+  </p>
+
+  <h3>I broke something, give me back yesterday's code</h3>
+<pre><code><span class="comment"># See what changed</span>
+git status
+git diff
+
+<span class="comment"># Discard ALL uncommitted changes (dangerous — you can't undo this)</span>
+git restore .
+
+<span class="comment"># Discard changes to just one file</span>
+git restore app/Http/Controllers/Auth/LoginController.php
+
+<span class="comment"># Get back to a specific commit (only on your own branch)</span>
+git log --oneline -10              <span class="comment"># find the hash</span>
+git reset --hard &lt;hash&gt;</code></pre>
+
+  <h3>I accidentally staged something I didn't want</h3>
+<pre><code>git restore --staged path/to/file      <span class="comment"># unstage, keep the file</span>
+git status                              <span class="comment"># verify</span></code></pre>
+
+  <h3>My branch is behind main, I need to catch up</h3>
+<pre><code>git fetch origin
+git rebase origin/main
+<span class="comment"># Fix conflicts if any, then:</span>
+git add &lt;resolved-file&gt;
+git rebase --continue</code></pre>
+
+  <h3>I committed my .env by accident</h3>
+<pre><code><span class="comment"># STOP. Don't push.</span>
+git rm --cached .env
+<span class="comment"># Add .env to .gitignore, then:</span>
+git commit -m "chore: remove .env from tracking"
+
+<span class="comment"># If you already pushed, tell the team — everyone needs to rotate secrets.</span></code></pre>
+
+  <div class="callout danger">
+    <strong>Never <code>git push --force</code> to <code>main</code>.</strong>
+    It rewrites shared history and breaks everyone else's local repo.
+    <code>--force</code> is only acceptable on <em>your own</em> feature branch,
+    and even then, announce it in the group chat first.
+  </div>
+</section>
+
+<!-- ═══════════════════ 9. PROJECT CHEATSHEET ═══════════════════ -->
+<section id="project">
+  <h2><span class="num">09</span> Project structure cheatsheet</h2>
+  <p class="lede">
+    Where things live. All four developers should be able to find any file
+    without asking.
+  </p>
+
+<pre><code>association-dues-monitoring-system/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   └── Auth/
+│   │   │       ├── LoginController.php
+│   │   │       └── PasswordChangeController.php
+│   │   ├── Middleware/
+│   │   │   ├── EnsureUserHasRole.php
+│   │   │   └── EnsurePasswordIsChanged.php
+│   │   └── Requests/Auth/              <span class="comment"># form validation</span>
+│   ├── Models/                          <span class="comment"># Eloquent models</span>
+│   └── Services/                        <span class="comment"># business logic (rule engine)</span>
+├── bootstrap/app.php                     <span class="comment"># middleware aliases registered here</span>
+├── database/
+│   ├── factories/                        <span class="comment"># test-data factories</span>
+│   ├── migrations/                       <span class="comment"># one file per schema change</span>
+│   └── seeders/DatabaseSeeder.php        <span class="comment"># 4 test users</span>
+├── resources/views/
+│   ├── auth/                             <span class="comment"># login, password-change</span>
+│   ├── layouts/                          <span class="comment"># shared page chrome</span>
+│   └── dashboard.blade.php
+├── routes/
+│   ├── auth.php                          <span class="comment"># login, logout, password</span>
+│   └── web.php                           <span class="comment"># admin/staff/kiosk groups</span>
+└── tests/
+    ├── Feature/                          <span class="comment"># integration-level (boots app)</span>
+    │   ├── Auth/
+    │   ├── Middleware/
+    │   └── Models/
+    └── Unit/                             <span class="comment"># pure PHP, no framework</span></code></pre>
+
+  <h3>The four access tiers</h3>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>Route prefix</th><th>Middleware chain</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Guest</td>
+        <td><code>/login</code></td>
+        <td><code>guest</code></td>
+      </tr>
+      <tr>
+        <td>Homeowner (kiosk)</td>
+        <td><code>/kiosk/*</code></td>
+        <td><code>auth</code></td>
+      </tr>
+      <tr>
+        <td>HOA Staff + Officer</td>
+        <td><code>/staff/*</code></td>
+        <td><code>auth</code>, <code>password.changed</code>, <code>role:admin,staff,officer</code></td>
+      </tr>
+      <tr>
+        <td>Administrator</td>
+        <td><code>/admin/*</code></td>
+        <td><code>auth</code>, <code>password.changed</code>, <code>role:admin</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Useful commands</h3>
+  <table>
+    <thead>
+      <tr><th>Command</th><th>What it does</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>php artisan route:list</code></td><td>Every route + middleware + name</td></tr>
+      <tr><td><code>php artisan test</code></td><td>Run entire suite</td></tr>
+      <tr><td><code>php artisan test --filter=LoginTest</code></td><td>Run one test class</td></tr>
+      <tr><td><code>php artisan migrate</code></td><td>Apply pending migrations</td></tr>
+      <tr><td><code>php artisan db:seed</code></td><td>Add 4 test users</td></tr>
+      <tr><td><code>php artisan optimize:clear</code></td><td>Clear all caches (route, view, config, cache)</td></tr>
+      <tr><td><code>php artisan tinker</code></td><td>Interactive REPL (exit with <code>exit</code> or Ctrl+D — NEVER Ctrl+Z)</td></tr>
+      <tr><td><code>php -l file.php</code></td><td>Lint a single file before committing</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <p>
+    <strong>Association Dues Monitoring System</strong> &middot;
+    CvSU Carmona &middot; BS Computer Science 2026–2027
+  </p>
+  <p>
+    Maintained by the thesis team.
+    Found a bug in this playbook? Open a PR — this is a git repo too.
+  </p>
+</footer>
+
+</body>
+</html>
